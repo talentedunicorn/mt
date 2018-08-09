@@ -26,7 +26,7 @@
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "service": "node src/",
     "mocha": "mocha test/ --recursive --exit",
-    "client": "API_URL=http://localhost:3030 parcel watch index.html",
+    "client": "parcel watch index.html",
     "start": "concurrently 'npm run service' 'npm run client'"
   },
   "dependencies": {

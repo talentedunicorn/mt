@@ -47,7 +47,7 @@
 
   import Transaction from './components/Transaction'
 
-  const API_URL = process.env.API_URL + '/transactions?$sort[date]=-1'
+  const API_URL = '/transactions'
   export default ({
     name: 'App',
     components: {
@@ -64,7 +64,7 @@
     },
     methods: {
       fetchData() {
-        axios.get(API_URL)
+        axios.get(API_URL + '?$sort[date]=-1')
           .then((response) => this.transactions = response.data.data)
           .catch((error) => console.error(error))
       },
