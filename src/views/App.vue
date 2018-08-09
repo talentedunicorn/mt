@@ -29,8 +29,10 @@
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
       <ol>
-        <li v-for="(transaction, index) in transactions" @click="deleteItem(transaction._id)">
-          <Transaction :data="transaction" />
+        <li v-for="(transaction, index) in transactions">
+          <Transaction :data="transaction">
+            <a href="#" @click="deleteItem(transaction._id)">Delete</a>
+          </Transaction>
         </li>
       </ol>
     </section>
@@ -91,6 +93,8 @@
 </script>
 
 <style lang="scss">
+  @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
   :root {
     --border: 3px;
     --shadow: 2px 2px 0px var(--black);
@@ -100,6 +104,8 @@
     --black: hsl(0, 0%, 15%);
     --white: hsl(0, 0%, 94%);
     --gray: hsl(0, 0%, 85%);
+    --dark-gray: hsl(0, 0%, 80%);
+    --font: 'Montserrat', sans-serif;
     --font-larger: 3.5rem;
     --font-large: 2rem;
     --font-small: 0.9rem;
@@ -110,6 +116,7 @@
   body {
     background: var(--white);
     color: var(--black);
+    font-family: var(--font);
   }
 
   %heading {
@@ -124,7 +131,14 @@
     align-items: start;
 
     @media (min-aspect-ratio: 1/1) and (orientation: landscape) {
-      grid-template-columns: auto minmax(calc(var(--form-width) / 2), var(--form-width)) 2fr;
+      grid-template-columns: auto minmax(calc(var(--form-width) / 2), var(--form-width)) minmax(30rem, 2fr);
+    }
+
+    & > h1 {
+      margin: 0;
+      padding: var(--space);
+      letter-spacing: 0.25em;
+      background: var(--gray);
     }
   }
 
@@ -209,12 +223,13 @@
   }
 
   section {
-    padding: var(--double-space);
 
     h2 {
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
+      text-align: center;
+      padding: var(--double-space);
     }
 
     ol {

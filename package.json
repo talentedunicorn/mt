@@ -39,6 +39,7 @@
     "cors": "^2.8.4",
     "feathers-nedb": "^3.1.0",
     "helmet": "^3.13.0",
+    "moment": "^2.22.2",
     "nedb": "^1.8.0",
     "normalize.css": "^8.0.0",
     "serve-favicon": "^2.5.0",

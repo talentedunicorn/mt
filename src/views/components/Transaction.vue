@@ -3,16 +3,25 @@
     <h3 class="transaction-amount">RM {{ data.amount }}</h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
-      <span>{{ data.date }}</span>
+      <span>{{ data.date | shortDate }}</span>
       <span>{{ data.time }}</span>
     </time>
+    <slot></slot>
   </article>
 </template>
 
 <script>
+  import moment from 'moment'
+
   export default({
     name: 'Transaction',
-    props: ['data']
+    props: ['data'],
+    filters: {
+      shortDate(value) {
+        if (!value) return ''
+        return moment(value).format('MMM, YYYY - DD')
+      }
+    }
   })
 </script>
 
