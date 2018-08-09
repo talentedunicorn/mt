@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <h1>MT</h1>
 
     <form @submit.prevent="handleSubmit">
@@ -119,6 +119,15 @@
     margin: 0;
   }
 
+  .wrapper {
+    display: grid;
+    align-items: start;
+
+    @media (min-aspect-ratio: 1/1) and (orientation: landscape) {
+      grid-template-columns: auto minmax(calc(var(--form-width) / 2), var(--form-width)) 2fr;
+    }
+  }
+
   form {
     display: grid;
     grid-gap: var(--space);
@@ -198,6 +207,7 @@
       transition: all ease-in 0.3s;
     }
   }
+
   section {
     padding: var(--double-space);
 
