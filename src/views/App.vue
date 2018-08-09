@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1>MT</h1>
+    <header>
+      <h1>MT</h1>
+    </header>
 
     <form @submit.prevent="handleSubmit">
       <label class="amount">
@@ -23,7 +25,7 @@
         <input type="text" v-model="form.comment"/>
       </label>
 
-      <button>Add transaction</button>
+      <button class="button">Add transaction</button>
     </form>
 
     <section v-if="transactions.length > 0">
@@ -31,7 +33,7 @@
       <ol>
         <li v-for="(transaction, index) in transactions">
           <Transaction :data="transaction">
-            <a href="#" @click="deleteItem(transaction._id)">Delete</a>
+            <a href="#" class="button" @click="deleteItem(transaction._id)">Delete</a>
           </Transaction>
         </li>
       </ol>
@@ -45,7 +47,7 @@
 
   import Transaction from './components/Transaction'
 
-  const API_URL = process.env.API_URL + '/transactions'
+  const API_URL = process.env.API_URL + '/transactions?$sort[date]=-1'
   export default ({
     name: 'App',
     components: {
@@ -104,13 +106,13 @@
     --black: hsl(0, 0%, 15%);
     --white: hsl(0, 0%, 94%);
     --gray: hsl(0, 0%, 85%);
-    --dark-gray: hsl(0, 0%, 80%);
     --font: 'Montserrat', sans-serif;
     --font-larger: 3.5rem;
     --font-large: 2rem;
     --font-small: 0.9rem;
     --letter-space: 0.125em;
-    --form-width: 50rem;
+    --form-width: 40rem;
+    --list-width: 30rem;
   }
 
   body {
@@ -126,19 +128,55 @@
     margin: 0;
   }
 
+  @mixin breakpoint {
+    @media (min-aspect-ratio: 1/1) and (orientation: landscape) {
+      @content;
+    }
+  }
+
   .wrapper {
     display: grid;
-    align-items: start;
+    min-height: 100vh;
 
-    @media (min-aspect-ratio: 1/1) and (orientation: landscape) {
-      grid-template-columns: auto minmax(calc(var(--form-width) / 2), var(--form-width)) minmax(30rem, 2fr);
+    @include breakpoint {
+      grid-template-areas: "header list form";
+      grid-template-columns: min-content minmax(var(--list-width), 1fr) minmax(calc(var(--form-width) / 2), var(--form-width));
+
+      & > header {
+        grid-area: header;
+      }
+
+      & > section {
+        grid-area: list;
+      }
+
+      & > form {
+        grid-area: form;
+      }
     }
 
-    & > h1 {
-      margin: 0;
+    & > header {
       padding: var(--space);
-      letter-spacing: 0.25em;
-      background: var(--gray);
+      border: var(--border) solid;
+      border-width: 0 0 var(--border) 0;
+
+      @include breakpoint {
+        border-width: 0 var(--border) 0 0;
+      }
+
+      h1 {
+        margin: 0;
+        letter-spacing: 0.25em;
+        font-size: 1.5rem;
+        position: sticky;
+        top: var(--space);
+      }
+    }
+
+    & > form,
+    & > section {
+      align-self: start;
+      margin-top: var(--space);
     }
   }
 
@@ -146,10 +184,13 @@
     display: grid;
     grid-gap: var(--space);
     padding: var(--space);
-    max-width: var(--form-width);
 
     @media (orientation: landscape) {
       padding: var(--double-space);
+      /*
+      position: sticky;
+      top: 0;
+      */
     }
   }
 
@@ -200,8 +241,10 @@
     grid-column: span 2;
   }
 
-  button {
+  .button {
     @extend %heading;
+    text-decoration: none;
+    color: currentColor;
     justify-self: end;
     border: var(--border) solid;
     font-weight: bold;
@@ -223,18 +266,19 @@
   }
 
   section {
-
     h2 {
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
       text-align: center;
-      padding: var(--double-space);
+      padding: var(--double-space) var(--space) var(--half-space);
+      margin: 0;
     }
 
     ol {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
   }
 </style>
