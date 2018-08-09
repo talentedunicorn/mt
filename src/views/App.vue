@@ -28,18 +28,11 @@
 
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
-      <ul>
-        <li v-for="(transaction, index) in transactions">
-          <article>
-            <h3 class="transaction-amount">RM {{ transaction.amount }}</h3>
-            <p class="transaction-comment">{{ transaction.comment }}</p>
-            <time :datetime="transaction.date + ':' + transaction.time">
-              <span>{{ transaction.date }}</span>
-              <span>{{ transaction.time }}</span>
-            </time>
-          </article>
+      <ol>
+        <li v-for="(transaction, index) in transactions" @click="deleteItem(transaction._id)">
+          <Transaction :data="transaction" />
         </li>
-      </ul>
+      </ol>
     </section>
   </div>
 </template>
@@ -48,8 +41,14 @@
   import axios from 'axios'
   import 'normalize.css'
 
+  import Transaction from './components/Transaction'
+
   const API_URL = process.env.API_URL + '/transactions'
   export default ({
+    name: 'App',
+    components: {
+      Transaction
+    },
     data() {
       return {
         form: {},
@@ -74,7 +73,19 @@
             self.fetchData()
           })
           .catch((error) => console.error(error))
-      }
+      },
+			deleteItem(id) {
+        let self = this
+
+        if (id && window.confirm("This will be permanently deleted")) {
+          axios.delete(API_URL, { params: { _id: id }})
+            .then((response) => {
+              console.log(response)
+              self.fetchData()
+            })
+            .catch((error) => console.log(error))
+        }
+			}
     }
   })
 </script>
@@ -185,6 +196,20 @@
     &:active {
       box-shadow: none;
       transition: all ease-in 0.3s;
+    }
+  }
+  section {
+    padding: var(--double-space);
+
+    h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    ol {
+      list-style: none;
+      padding: 0;
     }
   }
 </style>
