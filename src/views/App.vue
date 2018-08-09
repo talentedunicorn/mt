@@ -5,22 +5,22 @@
     <form @submit.prevent="handleSubmit">
       <label class="amount">
         <span>Amount</span>
-        <input type="number" v-model="amount"/>
+        <input type="number" v-model="form.amount"/>
       </label>
 
       <label class="date">
         <span>Date</span>
-        <input type="date" v-model="date"/>
+        <input type="date" v-model="form.date"/>
       </label>
 
       <label class="time">
         <span>Time</span>
-        <input type="time" v-model="time"/>
+        <input type="time" v-model="form.time"/>
       </label>
 
       <label class="comment">
         <span>Comments</span>
-        <input type="text" v-model="comment"/>
+        <input type="text" v-model="form.comment"/>
       </label>
 
       <button>Add transaction</button>
@@ -52,10 +52,7 @@
   export default ({
     data() {
       return {
-        amount: 0,
-        date: null,
-        time: null,
-        comment: '',
+        form: {},
         transactions: []
       }
     },
@@ -69,17 +66,12 @@
           .catch((error) => console.error(error))
       },
       handleSubmit() {
-        let data = {
-          amount: this.amount,
-          date: this.date,
-          time: this.time,
-          comment: this.comment
-        }
+        let self = this
 
-        axios.post(API_URL, data)
+        axios.post(API_URL, self.form)
           .then(function (response) {
-            console.log('Successfully added', response)
-            this.fetchData()
+            self.form = {}
+            self.fetchData()
           })
           .catch((error) => console.error(error))
       }
