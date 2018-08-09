@@ -26,7 +26,8 @@
     "eslint": "eslint src/. test/. --config .eslintrc.json",
     "start": "node src/",
     "mocha": "mocha test/ --recursive --exit",
-    "client": "API_URL=http://b:3030 parcel index.html"
+    "client": "API_URL=http://b:3030 parcel index.html",
+    "dev": "concurrently 'npm run start' 'npm run client'"
   },
   "dependencies": {
     "@feathersjs/configuration": "^2.0.0",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^2.1.1",
+    "concurrently": "^3.6.1",
     "eslint": "^5.3.0",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.2",
