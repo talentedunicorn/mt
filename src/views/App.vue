@@ -5,7 +5,7 @@
     <form @submit.prevent="handleSubmit">
       <label class="amount">
         <span>Amount</span>
-        <input type="number" v-model="form.amount"/>
+        <input type="number" min="0" step="0.01" v-model="form.amount"/>
       </label>
 
       <label class="date">
