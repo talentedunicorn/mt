@@ -129,7 +129,7 @@
   }
 
   @mixin breakpoint {
-    @media (min-aspect-ratio: 1/1) and (orientation: landscape) {
+    @media screen and (min-device-aspect-ratio: 1/1) and (orientation: landscape) {
       @content;
     }
   }
@@ -185,7 +185,7 @@
     grid-gap: var(--space);
     padding: var(--space);
 
-    @media (orientation: landscape) {
+    @include breakpoint {
       padding: var(--double-space);
       /*
       position: sticky;
@@ -254,7 +254,7 @@
     grid-column: span 2;
     justify-self: center;
 
-    @media (orientation: landscape) {
+    @include breakpoint {
       justify-self: end;
     }
 
