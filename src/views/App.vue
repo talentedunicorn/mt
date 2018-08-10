@@ -159,8 +159,10 @@
       padding: var(--space);
       border: var(--border) solid;
       border-width: 0 0 var(--border) 0;
+      align-self: start;
 
       @include breakpoint {
+        align-self: unset;
         border-width: 0 var(--border) 0 0;
       }
 
