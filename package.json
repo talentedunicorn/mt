@@ -45,6 +45,7 @@
     "serve-favicon": "^2.5.0",
     "vue": "^2.5.17",
     "vue-hot-reload-api": "^2.3.0",
+    "vue-router": "^3.0.1",
     "winston": "^3.0.0"
   },
   "devDependencies": {
