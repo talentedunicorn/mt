@@ -1,0 +1,28 @@
+%heading {
+  font-size: var(--font-small);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-space);
+  margin: 0;
+}
+
+%button {
+  text-decoration: none;
+  color: currentColor;
+  border: var(--border) solid;
+  font-weight: bold;
+  background: var(--white);
+  padding: var(--half-space) var(--space);
+  box-shadow: var(--shadow);
+
+  &:hover,
+  &:active {
+    box-shadow: none;
+    transition: all ease-in 0.3s;
+  }
+}
+
+@mixin breakpoint {
+  @media screen and (min-device-aspect-ratio: 1/1) and (orientation: landscape) {
+    @content;
+  }
+}
