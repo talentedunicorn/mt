@@ -4,6 +4,12 @@
   </div>
 </template>
 
+<script>
+  export default ({
+    name: "App"
+  })
+</script>
+
 <style lang="scss">
   @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 

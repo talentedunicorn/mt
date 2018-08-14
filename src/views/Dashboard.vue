@@ -47,7 +47,7 @@
 
   const API_URL = '/transactions'
   export default ({
-    name: 'App',
+    name: 'Dashboard',
     components: {
       Transaction
     },
@@ -58,7 +58,7 @@
       }
     },
     mounted() {
-      this.fetchData()
+      this.$store.dispatch('fetchData')
     },
     methods: {
       fetchData() {
@@ -217,12 +217,9 @@
 
   section {
     h2 {
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      @extend %heading;
       text-align: center;
       padding: var(--double-space) var(--space) var(--half-space);
-      margin: 0;
     }
 
     ol {

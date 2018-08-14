@@ -1,0 +1,36 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
+
+Vue.use(Vuex)
+
+const API_URL = '/transactions'
+const store = new Vuex.Store({
+  state: {
+    form: {},
+    transactions: [],
+    accounts: []
+  },
+  mutations: {
+    ['SET_DATA'] ({ state, data }) {
+      state.transactions = data
+    }
+  },
+  actions: {
+    submitForm ({ state, commit, dispatch }) {
+      axios.post(API_URL, state.form)
+        .then(function (response) {
+          commit('resetForm')
+          dispatch('fetchData')
+        })
+        .catch((error) => console.error(error))
+    },
+    fetchData ({ commit }) {
+      axios.get(API_URL + '?$sort[date]=-1')
+        .then((response) => commit('SET_DATA', response.data.data))
+        .catch((error) => console.error(error))
+    }
+  }
+})
+
+export default store

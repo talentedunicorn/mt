@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from './store'
 import App from './views/App'
 import Dashboard from './views/Dashboard'
 import TransactionList from './views/components/TransactionList'
@@ -12,7 +13,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  store
 })
 
 new Vue({
