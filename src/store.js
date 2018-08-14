@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     accounts: []
   },
   mutations: {
-    ['SET_DATA'] ({ state, data }) {
+    ['SET_DATA'] (state, data) {
       state.transactions = data
     }
   },
@@ -29,6 +29,15 @@ const store = new Vuex.Store({
       axios.get(API_URL + '?$sort[date]=-1')
         .then((response) => commit('SET_DATA', response.data.data))
         .catch((error) => console.error(error))
+    },
+    deleteItem ({ dispatch }, id) {
+      if (id && window.confirm("This will be permanently deleted")) {
+        axios.delete(API_URL, { params: { _id: id }})
+          .then((response) => {
+            dispatch('fetchData')
+          })
+          .catch((error) => console.log(error))
+      }
     }
   }
 })

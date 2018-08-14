@@ -7,22 +7,22 @@
     <form @submit.prevent="handleSubmit">
       <label class="amount">
         <span>Amount</span>
-        <input type="number" min="0" step="0.01" v-model="form.amount"/>
+        <input type="number" min="0" step="0.01" :value="form.amount"/>
       </label>
 
       <label class="date">
         <span>Date</span>
-        <input type="date" v-model="form.date"/>
+        <input type="date" :value="form.date"/>
       </label>
 
       <label class="time">
         <span>Time</span>
-        <input type="time" v-model="form.time"/>
+        <input type="time" :value="form.time"/>
       </label>
 
       <label class="comment">
         <span>Comments</span>
-        <input type="text" v-model="form.comment"/>
+        <input type="text" :value="form.comment"/>
       </label>
 
       <button class="button">Add transaction</button>
@@ -43,6 +43,7 @@
 
 <script>
   import axios from 'axios'
+  import { mapState, mapActions } from 'vuex'
   import Transaction from './components/Transaction'
 
   const API_URL = '/transactions'
@@ -51,43 +52,18 @@
     components: {
       Transaction
     },
-    data() {
-      return {
-        form: {},
-        transactions: []
-      }
-    },
+    computed: mapState({
+      form: state => state.form,
+      transactions: state => state.transactions
+    }),
     mounted() {
       this.$store.dispatch('fetchData')
     },
     methods: {
-      fetchData() {
-        axios.get(API_URL + '?$sort[date]=-1')
-          .then((response) => this.transactions = response.data.data)
-          .catch((error) => console.error(error))
-      },
-      handleSubmit() {
-        let self = this
-
-        axios.post(API_URL, self.form)
-          .then(function (response) {
-            self.form = {}
-            self.fetchData()
-          })
-          .catch((error) => console.error(error))
-      },
-			deleteItem(id) {
-        let self = this
-
-        if (id && window.confirm("This will be permanently deleted")) {
-          axios.delete(API_URL, { params: { _id: id }})
-            .then((response) => {
-              console.log(response)
-              self.fetchData()
-            })
-            .catch((error) => console.log(error))
-        }
-			}
+      mapActions({
+        submitForm: 'submit'
+        deleteItem: 'deleteItem'
+      })
     }
   })
 </script>
