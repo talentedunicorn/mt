@@ -4,7 +4,7 @@
       <h1>MT</h1>
     </header>
 
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="submitForm">
       <label class="amount">
         <span>Amount</span>
         <input type="number" min="0" step="0.01" :value="form.amount"/>
@@ -60,10 +60,8 @@
       this.$store.dispatch('fetchData')
     },
     methods: {
-      mapActions({
-        submitForm: 'submit'
-        deleteItem: 'deleteItem'
-      })
+      submitForm() { return this.$store.dispatch('submitForm') },
+      deleteItem(id) { return this.$store.dispatch('deleteItem', id) }
     }
   })
 </script>

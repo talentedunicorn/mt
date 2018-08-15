@@ -14,13 +14,16 @@ const store = new Vuex.Store({
   mutations: {
     ['SET_DATA'] (state, data) {
       state.transactions = data
+    },
+    ['RESET_FORM'] (state) {
+      state.form = {}
     }
   },
   actions: {
     submitForm ({ state, commit, dispatch }) {
       axios.post(API_URL, state.form)
         .then(function (response) {
-          commit('resetForm')
+          commit('RESET_FORM')
           dispatch('fetchData')
         })
         .catch((error) => console.error(error))
