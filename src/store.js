@@ -9,7 +9,10 @@ const store = new Vuex.Store({
   state: {
     form: {},
     transactions: [],
-    accounts: []
+    accounts: [
+      { name: "Bank of money", amount: { symbol: "RM", value: "3,000" }},
+      { name: "Ah Loan", amount: { symbol: "RM", value: "32,000" }},
+    ]
   },
   mutations: {
     ['SET_DATA'] (state, data) {

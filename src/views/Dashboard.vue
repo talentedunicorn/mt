@@ -6,6 +6,9 @@
 
     <Form class="form" />
 
+    <section class="accounts">
+      <Account v-for="account in accounts" :name="account.name" :amount="account.amount"/>
+    </section>
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
       <ol>
@@ -24,16 +27,19 @@
   import { mapState, mapActions } from 'vuex'
   import Form from './components/Form'
   import Transaction from './components/Transaction'
+  import Account from './components/Account'
 
   const API_URL = '/transactions'
   export default ({
     name: 'Dashboard',
     components: {
       Form,
-      Transaction
+      Transaction,
+      Account
     },
     computed: mapState({
-      transactions: state => state.transactions
+      transactions: state => state.transactions,
+      accounts: state => state.accounts
     }),
     mounted() {
       this.$store.dispatch('fetchData')
@@ -52,7 +58,7 @@
     min-height: 100vh;
 
     @include breakpoint {
-      grid-template-areas: "header list form";
+      grid-template-areas: "header accounts form" "header list form";
       grid-template-columns: min-content minmax(var(--list-width), 1fr) minmax(calc(var(--form-width) / 2), var(--form-width));
 
       & > header {
@@ -65,6 +71,10 @@
 
       & > .form {
         grid-area: form;
+      }
+
+      & > .accounts {
+        grid-area: accounts;
       }
     }
 
@@ -89,6 +99,7 @@
     }
 
     & > .form,
+    & > .accounts,
     & > section {
       align-self: start;
       margin-top: var(--space);
