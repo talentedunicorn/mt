@@ -20,17 +20,12 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    submitForm ({ state, commit, dispatch }) {
-      if (state.form.length > 0) {
-        axios.post(API_URL, state.form)
-          .then(function (response) {
-            commit('RESET_FORM')
-            dispatch('fetchData')
-          })
-          .catch((error) => console.error(error))
-      } else {
-        console.log('Form has errors')
-      }
+    submitForm ({ state, commit, dispatch }, data) {
+      axios.post(API_URL, data)
+        .then(function (response) {
+          dispatch('fetchData')
+        })
+        .catch((error) => console.error(error))
     },
     fetchData ({ commit }) {
       axios.get(API_URL + '?$sort[date]=-1')

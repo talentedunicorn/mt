@@ -1,23 +1,24 @@
 <template>
-  <form @submit.prevent="submitForm">
+  <form ref="form" @submit.prevent="submitForm">
+    <span class="error"v-if="error" v-text="error"/>
     <label class="amount">
       <span>Amount</span>
-      <input type="number" min="0" step="0.01" :value="form.amount"/>
+      <input name="amount" type="number" min="0" step="0.01" data-error="Enter amount greater than 0" v-model="form.amount"/>
     </label>
 
     <label class="date">
       <span>Date</span>
-      <input type="date" :value="form.date"/>
+      <input name="date" type="date" data-error="Enter a valid date" v-model="form.date"/>
     </label>
 
     <label class="time">
       <span>Time</span>
-      <input type="time" :value="form.time"/>
+      <input name="time" type="time" data-error="Enter a valid time" v-model="form.time"/>
     </label>
 
     <label class="comment">
       <span>Comments</span>
-      <input type="text" :value="form.comment"/>
+      <input name="comment" type="text" data-error="Write a short description" v-model="form.comment"/>
     </label>
 
     <button class="button">Add transaction</button>
@@ -25,21 +26,76 @@
 </template>
 
 <script>
+  import validator from 'validator'
   export default({
     name: 'Form',
-    computed: {
-      form() {
-        return this.$store.state.form
+    data() {
+      return {
+        error: "",
+        form: {
+          amount: '',
+          date: '',
+          time: '',
+          comment: ''
+        }
       }
     },
     methods: {
-      submitForm() { return this.$store.dispatch('submitForm') },
+      submitForm() {
+        this.validateForm()
+        if (this.error === '') {
+          this.$store.dispatch('submitForm', this.form)
+          this.form = {} // Reset form
+        }
+      },
+      validateForm() {
+        this.error = ''
+        let inputs = this.$refs.form.querySelectorAll('input')
+
+        for (let input of inputs) {
+          let valid = isValid(input)
+          if (valid === false) {
+            this.error = input.dataset.error
+            break
+          }
+        }
+
+        function isValid(input) {
+          let isValid = false
+          let timeFormat = /(?:[0-1][0-9]|2[0-3]):(?:[0-5][0-9])?/g
+
+          switch(input.type) {
+            case 'number':
+              isValid = validator.isFloat(input.value) || validator.isInt(input.value)
+              break
+            case 'date':
+              isValid = new Date(input.value) instanceof Date && !isNaN(Date.parse(input.value))
+              break
+            case 'time':
+              isValid = timeFormat.test(input.value)
+              break
+            case 'text':
+              isValid = !validator.isEmpty(validator.trim(input.value))
+              break
+            default:
+              break
+          }
+
+          return isValid
+        }
+      }
     }
   })
 </script>
 
 <style lang="scss" scoped>
   @import '../../style/helpers';
+
+  .error {
+    padding: calc(var(--space) / 2) var(--space);
+    color: var(--white);
+    background: var(--black);
+  }
 
   form {
     display: grid;
@@ -96,6 +152,7 @@
     }
   }
 
+  .error,
   .amount,
   .category,
   .comment {
