@@ -71,6 +71,8 @@
 
       & > .form {
         grid-area: form;
+        position: sticky;
+        top: var(--space);
       }
 
       & > .accounts {
