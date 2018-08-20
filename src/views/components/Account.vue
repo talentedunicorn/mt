@@ -17,8 +17,11 @@
 
   article {
     display: grid;
-    grid-template-columns: 2fr 1fr;
     padding: var(--space);
+
+    @include breakpoint {
+      grid-template-columns: 2fr 1fr;
+    }
 
     h2 {
       @extend %heading;
@@ -28,7 +31,6 @@
     p {
       @extend %currency;
       align-self: center;
-      grid-column: 2;
     }
   }
 </style>
