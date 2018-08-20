@@ -22,6 +22,15 @@
   }
 }
 
+%currency {
+  font-weight: bold;
+  text-align: right;
+
+  span {
+    font-size: var(--font-larger);
+  }
+}
+
 @mixin breakpoint {
   @media screen and (min-device-aspect-ratio: 1/1) and (orientation: landscape) {
     @content;

@@ -1,6 +1,6 @@
 <template>
   <article class="transaction">
-    <h3 class="transaction-amount">RM {{ data.amount }}</h3>
+    <h3 class="transaction-amount">{{ currency }} <span v-text="data.amount"/></h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
       <span>{{ data.date | shortDate }}</span>
@@ -15,7 +15,7 @@
 
   export default({
     name: 'Transaction',
-    props: ['data'],
+    props: ['data', 'currency'],
     filters: {
       shortDate(value) {
         if (!value) return ''
@@ -26,6 +26,8 @@
 </script>
 
 <style lang="scss">
+  @import '../../style/_helpers.scss';
+
 	.transaction {
 		padding: var(--space);
 		margin: 0;
@@ -60,9 +62,7 @@
 
 		&-amount {
       margin: 0;
-	    text-align: right;
-			font-size: var(--font-large);
-			font-weight: bold;
+      @extend %currency;
 		}
 
 		section {

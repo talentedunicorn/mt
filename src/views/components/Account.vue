@@ -1,14 +1,14 @@
 <template>
   <article>
     <h2>{{ name }}</h2>
-    <p>{{ amount.symbol }} <span v-text="amount.value"></span></p>
+    <p>{{ currency }} <span v-text="amount"></span></p>
   </article>
 </template>
 
 <script>
   export default ({
     name: "Account",
-    props: [ "name", "amount" ]
+    props: [ "name", "amount", "currency" ]
   })
 </script>
 
@@ -26,14 +26,9 @@
     }
 
     p {
+      @extend %currency;
       align-self: center;
       grid-column: 2;
-      font-weight: bold;
-      text-align: right;
-
-      span {
-        font-size: var(--font-larger);
-      }
     }
   }
 </style>

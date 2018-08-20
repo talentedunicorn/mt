@@ -7,11 +7,12 @@ Vue.use(Vuex)
 const API_URL = '/transactions'
 const store = new Vuex.Store({
   state: {
+    currency: "RM",
     form: {},
     transactions: [],
     accounts: [
-      { name: "Bank of money", amount: { symbol: "RM", value: "3,000" }},
-      { name: "Ah Loan", amount: { symbol: "RM", value: "32,000" }},
+      { name: "Bank of money", amount: "3,000" },
+      { name: "Ah Loan", amount: "32,000" },
     ]
   },
   mutations: {

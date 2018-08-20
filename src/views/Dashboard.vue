@@ -7,13 +7,13 @@
     <Form class="form" />
 
     <section class="accounts">
-      <Account v-for="account in accounts" :name="account.name" :amount="account.amount"/>
+      <Account v-for="account in accounts" :name="account.name" :amount="account.amount" :currency="currency"/>
     </section>
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
       <ol>
         <li v-for="(transaction, index) in transactions">
-          <Transaction :data="transaction">
+          <Transaction :currency="currency" :data="transaction">
             <a href="#" class="button" @click="deleteItem(transaction._id)">Delete</a>
           </Transaction>
         </li>
@@ -38,6 +38,7 @@
       Account
     },
     computed: mapState({
+      currency: state => state.currency,
       transactions: state => state.transactions,
       accounts: state => state.accounts
     }),
@@ -72,7 +73,7 @@
       & > .form {
         grid-area: form;
         position: sticky;
-        top: var(--space);
+        top: 0;
       }
 
       & > .accounts {
@@ -104,7 +105,7 @@
     & > .accounts,
     & > section {
       align-self: start;
-      margin-top: var(--space);
+      padding-top: var(--double-space);
     }
   }
 
