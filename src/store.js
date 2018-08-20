@@ -11,8 +11,9 @@ const store = new Vuex.Store({
     form: {},
     transactions: [],
     accounts: [
-      { name: "Bank of money", amount: "3,000" },
-      { name: "Ah Loan", amount: "32,000" },
+      { name: "Total", amount: "26,223.58" },
+      { name: "Bank of money", amount: "23,023.00" },
+      { name: "Ah Loan", amount: "3,200.58" },
     ]
   },
   mutations: {
