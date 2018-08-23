@@ -1,6 +1,5 @@
 <template>
   <form ref="form" @submit.prevent="submitForm">
-    <span class="error"v-if="error" v-text="error"/>
     <label class="amount">
       <span>Amount</span>
       <input name="amount" type="number" min="0" step="0.01" data-error="Enter amount greater than 0" v-model="form.amount"/>
@@ -31,7 +30,6 @@
     name: 'Form',
     data() {
       return {
-        error: "",
         form: {
           amount: '',
           date: '',
@@ -43,19 +41,19 @@
     methods: {
       submitForm() {
         this.validateForm()
-        if (this.error === '') {
+        if (!this.$store.state.notification.msg) {
           this.$store.dispatch('submitForm', this.form)
           this.form = {} // Reset form
         }
       },
       validateForm() {
-        this.error = ''
+        this.$store.commit('SET_NOTIFICATION', {})
         let inputs = this.$refs.form.querySelectorAll('input')
 
         for (let input of inputs) {
           let valid = isValid(input)
           if (valid === false) {
-            this.error = input.dataset.error
+            this.$store.commit('SET_NOTIFICATION', { msg: input.dataset.error, type: "error" })
             break
           }
         }
@@ -90,12 +88,6 @@
 
 <style lang="scss" scoped>
   @import '../../style/helpers';
-
-  .error {
-    padding: calc(var(--space) / 2) var(--space);
-    color: var(--white);
-    background: var(--black);
-  }
 
   form {
     display: grid;
@@ -152,7 +144,6 @@
     }
   }
 
-  .error,
   .amount,
   .category,
   .comment {

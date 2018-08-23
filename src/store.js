@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const API_URL = '/transactions'
 const store = new Vuex.Store({
   state: {
+    notification: {},
     currency: "RM",
     form: {},
     transactions: [],
@@ -22,7 +23,10 @@ const store = new Vuex.Store({
     },
     ['RESET_FORM'] (state) {
       state.form = {}
-    }
+    },
+    ['SET_NOTIFICATION'] (state, data) {
+      state.notification = data
+    },
   },
   actions: {
     submitForm ({ state, commit, dispatch }, data) {
