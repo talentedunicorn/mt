@@ -41,7 +41,8 @@
     methods: {
       submitForm() {
         this.validateForm()
-        if (!this.$store.state.notification.msg) {
+        let { notification } = this.$store.state
+        if (!notification.type && notification.type !== "error") {
           this.$store.dispatch('submitForm', this.form)
           this.form = {} // Reset form
         }

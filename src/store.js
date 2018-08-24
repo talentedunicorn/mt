@@ -32,20 +32,25 @@ const store = new Vuex.Store({
     submitForm ({ state, commit, dispatch }, data) {
       axios.post(API_URL, data)
         .then(function (response) {
+          commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
           dispatch('fetchData')
         })
-        .catch((error) => console.error(error))
+        .catch((error) => { 
+          console.error(error)
+          commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
+        })
     },
     fetchData ({ commit }) {
       axios.get(API_URL + '?$sort[date]=-1')
         .then((response) => commit('SET_DATA', response.data.data))
         .catch((error) => console.error(error))
     },
-    deleteItem ({ dispatch }, id) {
+    deleteItem ({ commit, dispatch }, id) {
       if (id && window.confirm("This will be permanently deleted")) {
         axios.delete(API_URL, { params: { _id: id }})
           .then((response) => {
             dispatch('fetchData')
+            commit('SET_NOTIFICATION', { msg: "Successfully deleted.", type: "success" })
           })
           .catch((error) => console.log(error))
       }
