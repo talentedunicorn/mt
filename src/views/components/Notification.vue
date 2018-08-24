@@ -1,5 +1,5 @@
 <template>
-  <article>
+  <article :class="type">
     <p>{{ msg }}</p>
 
     <button @click="clear">Clear</button>
@@ -9,7 +9,7 @@
 <script>
   export default ({
     name: 'Notification',
-    props: [ 'msg' ],
+    props: [ 'msg', 'type' ],
     methods: {
       clear() {
         this.$store.commit('SET_NOTIFICATION', {})
@@ -30,6 +30,14 @@
     padding: calc(var(--space) / 2) var(--space);
     color: var(--white);
     background: var(--black);
+
+    &.error {
+      background: var(--red);
+    }
+
+    &.success {
+      background: var(--green);
+    }
 
     p {
       flex: 1;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Notification v-if="notification.msg" :msg="notification.msg"/>
+    <Notification v-if="notification.msg" :msg="notification.msg" :type="notification.type"/>
     <router-view></router-view>
   </div>
 </template>

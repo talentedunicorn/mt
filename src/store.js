@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: {
     notification: {},
     currency: "RM",
-    form: {},
+    currentTransaction: {},
     transactions: [],
     accounts: [
       { name: "Total", amount: "26,223.58" },

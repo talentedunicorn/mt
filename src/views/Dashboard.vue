@@ -26,13 +26,11 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { mapState, mapActions } from 'vuex'
   import Form from './components/Form'
   import Transaction from './components/Transaction'
   import Account from './components/Account'
 
-  const API_URL = '/transactions'
   export default ({
     name: 'Dashboard',
     components: {
