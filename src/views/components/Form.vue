@@ -41,7 +41,7 @@
     computed: {
       valid() {
         let { notification } = this.$store.state
-        return !notification.type && notification.type !== "error"
+        return typeof notification.type !== 'undefined' && notification.type !== 'error'
       },
     },
     methods: {
@@ -55,8 +55,7 @@
         let inputs = this.$refs.form.querySelectorAll('input')
 
         for (let input of inputs) {
-          let valid = isValid(input)
-          if (valid === false) {
+          if (!isValid(input)) {
             this.$store.commit('SET_NOTIFICATION', { msg: input.dataset.error, type: "error" })
             break
           }
