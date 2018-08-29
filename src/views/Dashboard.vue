@@ -15,7 +15,7 @@
         <li v-for="(transaction, index) in transactions">
           <Transaction :currency="currency" @click="updateItem(transaction._id)" :data="transaction">
             <div class="controls">
-              <!-- <a href="#" class="button" @click="updateItem(transaction._id)">Change</a> -->
+              <a href="#" class="button" @click="updateItem(transaction._id)">Change</a>
               <a href="#" class="button" @click="deleteItem(transaction._id)">Delete</a>
             </div>
           </Transaction>
@@ -47,9 +47,11 @@
       this.$store.dispatch('fetchData')
     },
     methods: {
-      deleteItem(id) { return this.$store.dispatch('deleteItem', id) },
+      deleteItem(id) {
+        this.$store.dispatch('deleteItem', id)
+      },
       updateItem(id) {
-        console.log('Updating', id)
+        this.$store.dispatch('selectTransaction', id)
       }
     }
   })

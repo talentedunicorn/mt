@@ -2,88 +2,47 @@
   <form ref="form" @submit.prevent="submitForm">
     <label class="amount">
       <span>Amount</span>
-      <input name="amount" type="number" min="0" step="0.01" data-error="Enter amount greater than 0" v-model="form.amount"/>
+      <input name="amount" type="number" min="0" step="0.01" v-model="form.amount"/>
     </label>
 
     <label class="date">
       <span>Date</span>
-      <input name="date" type="date" data-error="Enter a valid date" v-model="form.date"/>
+      <input name="date" type="date" v-model="form.date"/>
     </label>
 
     <label class="time">
       <span>Time</span>
-      <input name="time" type="time" data-error="Enter a valid time" v-model="form.time"/>
+      <input name="time" type="time" v-model="form.time"/>
     </label>
 
     <label class="comment">
       <span>Comments</span>
-      <input name="comment" type="text" data-error="Write a short description" v-model="form.comment"/>
+      <input name="comment" type="text" v-model="form.comment"/>
     </label>
 
-    <button class="button">Add transaction</button>
+    <button class="button">{{ updating ? 'Update' : 'Add' }} transaction</button>
   </form>
 </template>
 
 <script>
-  import validator from 'validator'
   export default({
     name: 'Form',
-    data() {
-      return {
-        form: {
-          amount: '',
-          date: '',
-          time: '',
-          comment: ''
-        }
-      }
-    },
     computed: {
-      valid() {
-        let { notification } = this.$store.state
-        return typeof notification.type !== 'undefined' && notification.type !== 'error'
+      form: {
+        get() {
+          return this.$store.state.currentTransaction
+        },
+        set(data) {
+          this.store.commit('SET_DATA', { name: 'currentTransaction', data })
+        }
+      },
+      updating() {
+        return this.$store.state.currentTransaction.hasOwnProperty('_id')
       },
     },
     methods: {
       submitForm() {
-        this.validateForm()
-        this.valid && this.$store.dispatch('submitForm', { type: 'create', data: this.form })
-            .then(() => { this.form = {} })
-      },
-      validateForm() {
-        this.$store.commit('SET_NOTIFICATION', {})
-        let inputs = this.$refs.form.querySelectorAll('input')
-
-        for (let input of inputs) {
-          if (!isValid(input)) {
-            this.$store.commit('SET_NOTIFICATION', { msg: input.dataset.error, type: "error" })
-            break
-          }
-        }
-
-        function isValid(input) {
-          let isValid = false
-          let timeFormat = /(?:[0-1][0-9]|2[0-3]):(?:[0-5][0-9])?/g
-
-          switch(input.type) {
-            case 'number':
-              isValid = validator.isFloat(input.value) || validator.isInt(input.value)
-              break
-            case 'date':
-              isValid = new Date(input.value) instanceof Date && !isNaN(Date.parse(input.value))
-              break
-            case 'time':
-              isValid = timeFormat.test(input.value)
-              break
-            case 'text':
-              isValid = !validator.isEmpty(validator.trim(input.value))
-              break
-            default:
-              break
-          }
-
-          return isValid
-        }
+        this.$store.dispatch('submitForm')
       }
     }
   })
