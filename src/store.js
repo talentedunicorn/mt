@@ -29,16 +29,25 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    submitForm ({ state, commit, dispatch }, data) {
-      axios.post(API_URL, data)
-        .then(function (response) {
-          commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
-          dispatch('fetchData')
-        })
-        .catch((error) => { 
-          console.error(error)
-          commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
-        })
+    submitForm ({ state, commit, dispatch }, { type, data }) {
+      switch (type) {
+        case 'create':
+          axios.post(API_URL, data)
+            .then(function (response) {
+              commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
+              dispatch('fetchData')
+            })
+            .catch((error) => { 
+              console.error(error)
+              commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
+            })
+        break
+        case 'update':
+          console.log('Updating')
+        break
+        default:
+        break
+      }
     },
     fetchData ({ commit }) {
       axios.get(API_URL + '?$sort[date]=-1')

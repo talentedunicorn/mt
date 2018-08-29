@@ -38,14 +38,17 @@
         }
       }
     },
+    computed: {
+      valid() {
+        let { notification } = this.$store.state
+        return !notification.type && notification.type !== "error"
+      },
+    },
     methods: {
       submitForm() {
         this.validateForm()
-        let { notification } = this.$store.state
-        if (!notification.type && notification.type !== "error") {
-          this.$store.dispatch('submitForm', this.form)
-          this.form = {} // Reset form
-        }
+        this.valid && this.$store.dispatch('submitForm', { type: 'create', data: this.form })
+            .then(() => { this.form = {} })
       },
       validateForm() {
         this.$store.commit('SET_NOTIFICATION', {})
