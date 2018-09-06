@@ -21,6 +21,7 @@
     </label>
 
     <button class="button">{{ updating ? 'Update' : 'Add' }} transaction</button>
+    <button class="button" v-if="updating" @click="resetForm">Clear</button>
   </form>
 </template>
 
@@ -43,6 +44,10 @@
     methods: {
       submitForm() {
         this.$store.dispatch('submitForm')
+      },
+      resetForm(e) {
+        e.preventDefault()
+        this.$store.commit('RESET_FORM')
       }
     }
   })
