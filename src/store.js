@@ -76,7 +76,7 @@ const store = new Vuex.Store({
     },
     selectTransaction({ state, commit }, id) {
       let transaction = state.transactions.filter((item) => item._id === id)[0]
-      commit('SET_DATA', { name: 'currentTransaction', data: transaction })
+      commit('SET_DATA', { name: 'currentTransaction', data: Object.assign({}, transaction) })
     },
     validateForm ({ state, commit }) {
       // reset notification
