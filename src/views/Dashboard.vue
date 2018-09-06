@@ -65,38 +65,32 @@
   .wrapper {
     display: grid;
     min-height: 100vh;
+    grid-template-areas: "header" "accounts" "form" "list";
+    align-items: start;
 
     @include breakpoint {
       grid-template-areas: "header accounts form" "header list form";
       grid-template-columns: min-content minmax(var(--list-width), 1fr) minmax(calc(var(--form-width) / 2), var(--form-width));
 
-      & > header {
-        grid-area: header;
-      }
-
+      /*
+      & > .form,
+      & > .accounts,
       & > section {
-        grid-area: list;
+        align-self: start;
+        padding-top: var(--double-space);
       }
-
-      & > .form {
-        grid-area: form;
-        position: sticky;
-        top: 0;
-      }
-
-      & > .accounts {
-        grid-area: accounts;
-      }
+      */
     }
 
     & > header {
+      grid-area: header;
+      align-self: start;
       padding: var(--space);
       border: var(--border) solid;
       border-width: 0 0 var(--border) 0;
-      align-self: start;
 
       @include breakpoint {
-        align-self: unset;
+        align-self: stretch;
         border-width: 0 var(--border) 0 0;
       }
 
@@ -109,11 +103,20 @@
       }
     }
 
-    & > .form,
-    & > .accounts,
     & > section {
-      align-self: start;
-      padding-top: var(--double-space);
+      grid-area: list;
+    }
+
+    & > .accounts {
+      grid-area: accounts;
+      padding-top: var(--space);
+    }
+
+    & > .form {
+      background: var(--white);
+      grid-area: form;
+      position: sticky;
+      top: 0;
     }
   }
 
