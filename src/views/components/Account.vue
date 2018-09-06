@@ -19,10 +19,6 @@
     display: grid;
     padding: var(--space);
 
-    @include breakpoint {
-      grid-template-columns: 2fr 1fr;
-    }
-
     h2 {
       @extend %heading;
       margin: 0;

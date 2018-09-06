@@ -13,7 +13,6 @@ const store = new Vuex.Store({
     currentTransaction: {},
     transactions: [],
     accounts: [
-      { name: "Total", amount: "26,223.58" },
       { name: "Bank of money", amount: "23,023.00" },
       { name: "Ah Loan", amount: "3,200.58" },
     ]

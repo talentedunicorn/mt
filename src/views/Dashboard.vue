@@ -71,15 +71,6 @@
     @include breakpoint {
       grid-template-areas: "header accounts form" "header list form";
       grid-template-columns: min-content minmax(var(--list-width), 1fr) minmax(calc(var(--form-width) / 2), var(--form-width));
-
-      /*
-      & > .form,
-      & > .accounts,
-      & > section {
-        align-self: start;
-        padding-top: var(--double-space);
-      }
-      */
     }
 
     & > header {
@@ -125,10 +116,7 @@
     display: grid;
     grid-auto-flow: column;
     grid-column-gap: var(--space);
-
-    @include breakpoint {
-      justify-self: end;
-    }
+    justify-self: end;
   }
 
   section {

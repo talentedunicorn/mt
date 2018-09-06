@@ -53,7 +53,7 @@
 
   form {
     display: grid;
-    grid-gap: var(--space);
+    grid-gap: var(--space) var(--half-space);
     padding: var(--space);
 
     @include breakpoint {

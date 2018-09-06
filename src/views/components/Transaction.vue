@@ -32,7 +32,7 @@
 		padding: var(--space);
 		margin: 0;
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		/* grid-template-columns: repeat(2, 1fr); */
 		grid-row-gap: var(--half-space);
 		border-bottom: var(--border) solid var(--gray);
 
