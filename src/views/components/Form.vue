@@ -20,8 +20,15 @@
       <input name="comment" type="text" v-model="form.comment"/>
     </label>
 
+    <label class="category">
+      <span>Categories</span>
+      <select name="categories" multiple v-model="selectedCategories">
+        <option v-for="(option, i) in allCategories" :key="i" :value="option">{{ option }}</option>
+      </select>
+    </label>
+
     <button class="button">{{ updating ? 'Update' : 'Add' }} transaction</button>
-    <button class="button" v-if="updating" @click="resetForm">Clear</button>
+    <button class="button" v-if="updating" @click="resetForm">Cancel</button>
   </form>
 </template>
 
@@ -29,6 +36,17 @@
   export default({
     name: 'Form',
     computed: {
+      selectedCategories: {
+        get() {
+          return this.$store.state.selectedCategories
+        },
+        set(data) {
+          return this.$store.commit('SET_DATA', { name: 'selectedCategories', data })
+        }
+      },
+      allCategories() {
+        return this.$store.state.allCategories
+      },
       form: {
         get() {
           return this.$store.state.currentTransaction

@@ -10,6 +10,15 @@ const store = new Vuex.Store({
   state: {
     notification: {},
     currency: "RM",
+    selectedCategories: [],
+    allCategories: [
+      'Food',
+      'Transport',
+      'Rent',
+      'Vacation',
+      'Medical',
+      'Entertainment'
+    ],
     currentTransaction: {},
     transactions: [],
     accounts: [
@@ -23,6 +32,7 @@ const store = new Vuex.Store({
     },
     ['RESET_FORM'] (state) {
       state.currentTransaction = {}
+      state.selectedCategories = []
     },
     ['SET_NOTIFICATION'] (state, data) {
       state.notification = data
@@ -32,8 +42,11 @@ const store = new Vuex.Store({
     submitForm ({ state, commit, dispatch }) {
       dispatch('validateForm')
       .then(() => {
-        let { notification, currentTransaction } = state
+        let { notification, currentTransaction, selectedCategories } = state
+
         if (notification.type !== 'error') {
+          currentTransaction.categories = selectedCategories
+
           if (currentTransaction._id) {
             console.log('Updating')
             axios.put(API_URL + "/" + currentTransaction._id, currentTransaction)
@@ -56,7 +69,6 @@ const store = new Vuex.Store({
           }
         }
       })
-
     },
     fetchData ({ commit }) {
       axios.get(API_URL + '?$sort[date]=-1')
@@ -76,6 +88,7 @@ const store = new Vuex.Store({
     selectTransaction({ state, commit }, id) {
       let transaction = state.transactions.filter((item) => item._id === id)[0]
       commit('SET_DATA', { name: 'currentTransaction', data: Object.assign({}, transaction) })
+      commit('SET_DATA', { name: 'selectedCategories', data: transaction.categories || [] })
     },
     validateForm ({ state, commit }) {
       // reset notification
@@ -98,6 +111,14 @@ const store = new Vuex.Store({
       // check for fields
       if (Object.keys(state.currentTransaction).length > 0) { 
         Object.keys(form).forEach((name) => {
+          // Add categories to current transaction
+          if (name === 'categories') {
+            commit('SET_DATA', { 
+              name: 'currentTransaction', 
+              data: Object.assign(state.currentTransaction, { categories: state.selectedCategories })
+            })
+          }
+
           let value = state.currentTransaction[name]
 
           let isValid = validate(name, value, form[name].msg) 
@@ -127,6 +148,9 @@ const store = new Vuex.Store({
             break
           case 'comment':
             return !validator.isEmpty(validator.trim(value))
+            break
+          case 'categories':
+            return true // Allow empty categories
             break
           default:
             break
