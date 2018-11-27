@@ -17,16 +17,11 @@
     "lib": "src",
     "test": "test/"
   },
-  "engines": {
-    "node": "^10.0.0",
-    "yarn": ">= 0.18.0"
-  },
   "scripts": {
-    "test": "yarn run eslint && yarn run mocha",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "test": "yarn run mocha",
     "service": "node src/",
     "mocha": "mocha test/ --recursive --exit",
-    "client": "parcel watch index.html",
+    "client": "vue-cli-service build --watch ./src/client.js",
     "start": "concurrently 'npm run service' 'npm run client'"
   },
   "dependencies": {
@@ -51,14 +46,14 @@
     "winston": "^3.0.0"
   },
   "devDependencies": {
+    "@vue/cli-service": "^3.1.4",
     "@vue/component-compiler-utils": "^2.1.1",
     "concurrently": "^3.6.1",
-    "eslint": "^5.3.0",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.2",
-    "parcel-bundler": "^1.9.7",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
+    "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.17"
   }
 }
