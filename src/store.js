@@ -94,6 +94,9 @@ const store = new Vuex.Store({
       // reset notification
       commit('SET_NOTIFICATION', {})
       let form = {
+        account: {
+          msg: "Select an account"
+        },
         amount: {
           msg: "Enter amount greater than 0"
         },
@@ -152,6 +155,8 @@ const store = new Vuex.Store({
           case 'categories':
             return true // Allow empty categories
             break
+          case 'account':
+            return !validator.isEmpty(validator.trim(value))
           default:
             break
         }

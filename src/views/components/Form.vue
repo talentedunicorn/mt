@@ -1,5 +1,12 @@
 <template>
   <form ref="form" @submit.prevent="submitForm">
+    <label class="account">
+      <span>Account</span>
+      <select name="account" v-model="form.account">
+        <option v-for="(account, k) in accounts" :key="k" :value="account.name">{{ account.name }}</option>
+      </select>
+    </label>
+
     <label class="amount">
       <span>Amount</span>
       <input name="amount" type="number" min="0" step="0.01" v-model="form.amount"/>
@@ -33,20 +40,10 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default({
     name: 'Form',
     computed: {
-      selectedCategories: {
-        get() {
-          return this.$store.state.selectedCategories
-        },
-        set(data) {
-          return this.$store.commit('SET_DATA', { name: 'selectedCategories', data })
-        }
-      },
-      allCategories() {
-        return this.$store.state.allCategories
-      },
       form: {
         get() {
           return this.$store.state.currentTransaction
@@ -55,9 +52,19 @@
           this.store.commit('SET_DATA', { name: 'currentTransaction', data })
         }
       },
-      updating() {
-        return this.$store.state.currentTransaction.hasOwnProperty('_id')
+      selectedCategories: {
+        get() {
+          return this.$store.state.selectedCategories
+        },
+        set(data) {
+          return this.$store.commit('SET_DATA', { name: 'selectedCategories', data })
+        }
       },
+      ...mapState({
+        allCategories: state => state.allCategories,
+        accounts: state => state.accounts,
+        updating: state => state.currentTransaction.hasOwnProperty('_id'),
+      }),
     },
     methods: {
       submitForm() {
