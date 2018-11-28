@@ -56,14 +56,14 @@ const store = new Vuex.Store({
 
           if (currentTransaction._id) {
             console.log('Updating')
-            axios.put(API_URL + "/" + currentTransaction._id, currentTransaction)
+            axios.put(TRANSACTIONS_URL + "/" + currentTransaction._id, currentTransaction)
               .then(function (response) {
                 commit('SET_NOTIFICATION', { msg: "Successfully updated.", type: "success" })
                 commit('RESET_FORM')
                 dispatch('fetchData')
               })
           } else {
-            axios.post(API_URL, currentTransaction)
+            axios.post(TRANSACTIONS_URL, currentTransaction)
               .then(function (response) {
                 commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
                 commit('RESET_FORM')
