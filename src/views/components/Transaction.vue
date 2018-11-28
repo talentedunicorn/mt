@@ -1,5 +1,5 @@
 <template>
-  <article class="transaction">
+  <article class="transaction" :data-account="data.account">
     <h3 class="transaction-amount">{{ currency }} <span v-text="data.amount"/></h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
@@ -35,6 +35,15 @@
 		/* grid-template-columns: repeat(2, 1fr); */
 		grid-row-gap: var(--half-space);
 		border-bottom: var(--border) solid var(--gray);
+
+    &::before {
+      content: attr(data-account);
+      grid-row: 1;
+      text-transform: uppercase;
+      letter-spacing: var(--letter-space);
+      font-weight: var(--bold);
+      font-size: var(--font-small);
+    }
 
 		&:last-child {
 			border: none;
