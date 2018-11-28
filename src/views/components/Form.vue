@@ -29,9 +29,10 @@
 
     <label class="category">
       <span>Categories</span>
-      <select name="categories" multiple v-model="selectedCategories">
-        <option v-for="(option, i) in allCategories" :key="i" :value="option">{{ option }}</option>
-      </select>
+      <div v-for="(category, i) in allCategories" :key="i">
+        <input :id="category" type="checkbox" name="categories" :value="category" v-model="selectedCategories"/>
+        <label :for="category">{{ category }}</label>
+      </div>
     </label>
 
     <button class="button">{{ updating ? 'Update' : 'Add' }} transaction</button>
@@ -93,49 +94,48 @@
       top: 0;
       */
     }
-  }
 
-  label {
-    @extend %heading;
-    font-weight: bold;
-    display: grid;
-
-    span {
-      margin-bottom: var(--half-space);
-    }
-
-    &[data-currency] {
-      grid-template-columns: min-content 1fr;
-      align-items: center;
-      grid-template-areas: "label label" "prefix input";
+    & > label {
+      @extend %heading;
+      font-weight: bold;
+      display: grid;
 
       span {
-        grid-area: label;
+        margin-bottom: var(--half-space);
       }
 
-      &::before {
-        content: attr(data-currency);
-        grid-area: prefix;
-        text-align: center;
+      &[data-currency] {
+        grid-template-columns: min-content 1fr;
+        align-items: center;
+        grid-template-areas: "label label" "prefix input";
+
+        span {
+          grid-area: label;
+        }
+
+        &::before {
+          content: attr(data-currency);
+          grid-area: prefix;
+          text-align: center;
+          border: var(--border) solid;
+          border-right: none;
+          padding: var(--half-space);
+        }
+
+        input {
+          grid-area: input;
+        }
+      }
+
+      input,
+      select,
+      textarea {
         border: var(--border) solid;
-        border-right: none;
         padding: var(--half-space);
+        max-width: 100%;
       }
-
-      input {
-        grid-area: input;
-      }
-    }
-
-    input,
-    select,
-    textarea {
-      border: var(--border) solid;
-      padding: var(--half-space);
-      max-width: 100%;
     }
   }
-
   .amount,
   .category,
   .comment {
@@ -145,5 +145,18 @@
   .button {
     grid-column: span 2;
     justify-self: center;
+  }
+
+  .category {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > span {
+      flex: 100%;
+    }
+
+    & > div {
+      margin-right: var(--half-space);
+    }
   }
 </style>
