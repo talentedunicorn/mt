@@ -7,6 +7,13 @@
       </select>
     </label>
 
+    <label class="type">
+      <span>Type</span>
+      <select name="type" v-model="form.type">
+        <option v-for="(type, k) in transactionTypes" :key="k" :value="type">{{ type }}</option>
+      </select>
+    </label>
+
     <label class="amount">
       <span>Amount</span>
       <input name="amount" type="number" min="0" step="0.01" v-model="form.amount"/>
@@ -63,6 +70,7 @@
       },
       ...mapState({
         allCategories: state => state.allCategories,
+        transactionTypes: state => state.transactionTypes,
         accounts: state => state.accounts,
         updating: state => state.currentTransaction.hasOwnProperty('_id'),
       }),

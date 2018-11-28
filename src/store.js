@@ -21,6 +21,10 @@ const store = new Vuex.Store({
     ],
     currentTransaction: {},
     transactions: [],
+    transactionTypes: [
+      'Debit',
+      'Credit'
+    ],
     accounts: [
       { name: "Bank of money", amount: "23,023.00" },
       { name: "Ah Loan", amount: "3,200.58" },
@@ -108,6 +112,9 @@ const store = new Vuex.Store({
         },
         comment: {
           msg: "Write a short description"
+        },
+        type: {
+          msg: "Transaction type is required"
         }
       }
 
@@ -156,6 +163,8 @@ const store = new Vuex.Store({
             return true // Allow empty categories
             break
           case 'account':
+            return !validator.isEmpty(validator.trim(value))
+          case 'type':
             return !validator.isEmpty(validator.trim(value))
           default:
             break
