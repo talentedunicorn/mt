@@ -1,8 +1,9 @@
 <template>
-  <form ref="form" @submit.prevent="submitForm">
+  <form class="form" @submit.prevent="submitForm" :class="{ collapsed: collapsed }">
     <label class="account">
       <span>Account</span>
       <select name="account" v-model="form.account">
+        <option disabled :value="undefined">Select account</option>
         <option v-for="(account, k) in accounts" :key="k" :value="account.name">{{ account.name }}</option>
       </select>
     </label>
@@ -10,6 +11,7 @@
     <label class="type">
       <span>Type</span>
       <select name="type" v-model="form.type">
+        <option disabled :value="undefined">Select type</option>
         <option v-for="(type, k) in transactionTypes" :key="k" :value="type">{{ type }}</option>
       </select>
     </label>
@@ -44,6 +46,8 @@
 
     <button class="button">{{ updating ? 'Update' : 'Add' }} transaction</button>
     <button class="button" v-if="updating" @click="resetForm">Cancel</button>
+
+    <button class="button toggle" @click="toggleForm">{{ collapsed ? 'Show': 'Hide' }} form</button>
   </form>
 </template>
 
@@ -51,6 +55,11 @@
   import { mapState } from 'vuex'
   export default({
     name: 'Form',
+    data () {
+      return {
+        collapsed: false
+      }
+    },
     computed: {
       form: {
         get() {
@@ -82,6 +91,10 @@
       resetForm(e) {
         e.preventDefault()
         this.$store.commit('RESET_FORM')
+      },
+      toggleForm(e) {
+        e.preventDefault()
+        this.collapsed = !this.collapsed
       }
     }
   })
@@ -93,7 +106,16 @@
   form {
     display: grid;
     grid-gap: var(--space) var(--half-space);
-    padding: var(--space);
+
+    &.collapsed {
+      & > * {
+        display: none;
+      }
+
+      & > .toggle {
+        display: unset;
+      }
+    }
 
     @include breakpoint {
       padding: var(--double-space);
@@ -101,47 +123,6 @@
       position: sticky;
       top: 0;
       */
-    }
-
-    & > label {
-      @extend %heading;
-      font-weight: bold;
-      display: grid;
-
-      span {
-        margin-bottom: var(--half-space);
-      }
-
-      &[data-currency] {
-        grid-template-columns: min-content 1fr;
-        align-items: center;
-        grid-template-areas: "label label" "prefix input";
-
-        span {
-          grid-area: label;
-        }
-
-        &::before {
-          content: attr(data-currency);
-          grid-area: prefix;
-          text-align: center;
-          border: var(--border) solid;
-          border-right: none;
-          padding: var(--half-space);
-        }
-
-        input {
-          grid-area: input;
-        }
-      }
-
-      input,
-      select,
-      textarea {
-        border: var(--border) solid;
-        padding: var(--half-space);
-        max-width: 100%;
-      }
     }
   }
   .amount,

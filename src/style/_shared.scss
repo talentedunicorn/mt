@@ -40,3 +40,47 @@ body {
   @extend %button;
 }
 
+.form {
+  padding: var(--space);
+
+  & > label {
+    @extend %heading;
+    font-weight: bold;
+    display: grid;
+
+    span {
+      margin-bottom: var(--half-space);
+    }
+
+    &[data-currency] {
+      grid-template-columns: min-content 1fr;
+      align-items: center;
+      grid-template-areas: "label label" "prefix input";
+
+      span {
+        grid-area: label;
+      }
+
+      &::before {
+        content: attr(data-currency);
+        grid-area: prefix;
+        text-align: center;
+        border: var(--border) solid;
+        border-right: none;
+        padding: var(--half-space);
+      }
+
+      input {
+        grid-area: input;
+      }
+    }
+
+    input,
+    select,
+    textarea {
+      border: var(--border) solid;
+      padding: var(--half-space);
+      max-width: 100%;
+    }
+  }
+}

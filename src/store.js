@@ -5,11 +5,17 @@ import validator from 'validator'
 
 Vue.use(Vuex)
 
-const API_URL = '/transactions'
+const TRANSACTIONS_URL = '/transactions',
+      ACCOUNTS_URL = '/accounts'
 const store = new Vuex.Store({
   state: {
     notification: {},
     currency: "RM",
+    currencies: [
+      { symbol: "RM", code: "MYR" },
+      { symbol: "$", code: "USD" }
+    ],
+    newAccount: {},
     selectedCategories: [],
     allCategories: [
       'Food',
@@ -25,10 +31,7 @@ const store = new Vuex.Store({
       'Debit',
       'Credit'
     ],
-    accounts: [
-      { name: "Bank of money", amount: "23,023.00" },
-      { name: "Ah Loan", amount: "3,200.58" },
-    ]
+    accounts: []
   },
   mutations: {
     ['SET_DATA'] (state, { name, data }) {
@@ -74,16 +77,25 @@ const store = new Vuex.Store({
         }
       })
     },
-    fetchData ({ commit }) {
-      axios.get(API_URL + '?$sort[date]=-1')
+    fetchData ({ dispatch }) {
+      dispatch('fetchAccounts')
+        .then(dispatch('fetchTransactions'))
+    },
+    fetchTransactions ({ commit }) {
+      axios.get(`${TRANSACTIONS_URL}?$sort[date]=-1`)
         .then((response) => commit('SET_DATA', { name: 'transactions', data: response.data.data }))
         .catch((error) => console.error(error))
     },
-    deleteItem ({ commit, dispatch }, id) {
+    fetchAccounts ({ commit }) {
+      axios.get(ACCOUNTS_URL)
+        .then((response) => commit('SET_DATA', { name: 'accounts', data: response.data.data }))
+        .catch((error) => console.error(error))
+    },
+    deleteTransaction ({ commit, dispatch }, id) {
       if (id && window.confirm("This will be permanently deleted")) {
-        axios.delete(API_URL, { params: { _id: id }})
+        axios.delete(TRANSACTIONS_URL, { params: { _id: id }})
           .then((response) => {
-            dispatch('fetchData')
+            dispatch('fetchTransactions')
             commit('SET_DATA', { name: 'notification', data: { msg: "Successfully deleted.", type: "success" }})
           })
           .catch((error) => console.log(error))

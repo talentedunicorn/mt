@@ -49,7 +49,7 @@
     methods: {
       deleteItem(id, event) {
         event.preventDefault()
-        this.$store.dispatch('deleteItem', id)
+        this.$store.dispatch('deleteTransaction', id)
       },
       updateItem(id, event) {
         event.preventDefault()
@@ -106,8 +106,11 @@
     & > .form {
       background: var(--white);
       grid-area: form;
-      position: sticky;
-      top: 0;
+
+      @include breakpoint {
+        position: sticky;
+        top: 0;
+      }
     }
   }
 
