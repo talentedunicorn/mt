@@ -7,13 +7,13 @@
     <form class="form" @submit="addAccount">
       <label>
         <span>Name</span>
-        <input type="text" v-model="newAccount.name"/>
+        <input type="text" v-model="currentAccount.name"/>
       </label>
 
       <label>
         <span>Currency</span>
-        <select v-model="newAccount.currency">
-          <option :value="undefined" disabled>Select currency</option>
+        <select v-model="currentAccount.currency">
+          <option value="" disabled>Select currency</option>
           <option v-for="(currency, i) in currencies" :key="i" :value="currency.code">{{ currency.symbol }}</option>
         </select>
       </label>
@@ -22,13 +22,19 @@
     </form>
 
     <section class="accounts">
-      <Account v-for="(account, k) in accounts" :key="k" :name="account.name" :amount="account.amount" :currency="account.currency"/>
+      <ul>
+        <li v-for="(account, k) in accounts" :key="k">
+          <Account :name="account.name" :amount="account.amount" :currency="account.currency"/>
+          <button>Edit</button>
+          <button @click="deleteAccount(account._id)">Delete</button>
+        </li>
+      </ul>
     </section>
   </div>
 </template>
 
   <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   import Account from './components/Account'
   export default {
     name: 'AccountsPage',
@@ -38,15 +44,15 @@
     computed: {
       ...mapState({
         accounts: state => state.accounts,
-        newAccount: state => state.newAccount,
+        currentAccount: state => state.currentAccount,
         currencies: state => state.currencies
       })
     },
     methods: {
-      addAccount (e) {
-        e.preventDefault()
-        console.log(this.$store.state.newAccount)
-      }
+      ...mapActions([
+        'addAccount',
+        'deleteAccount'
+        ])
     },
     mounted () {
       this.$store.dispatch('fetchData')

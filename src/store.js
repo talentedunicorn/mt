@@ -15,7 +15,10 @@ const store = new Vuex.Store({
       { symbol: "RM", code: "MYR" },
       { symbol: "$", code: "USD" }
     ],
-    newAccount: {},
+    currentAccount: {
+      name: "",
+      currency: ""
+    },
     selectedCategories: [],
     allCategories: [
       'Food',
@@ -181,6 +184,60 @@ const store = new Vuex.Store({
           default:
             break
         }
+      }
+    },
+    addAccount ({ state, commit, dispatch }) {
+      // reset notification
+      commit('SET_NOTIFICATION', {})
+      let { name, currency } = state.currentAccount
+      let isValid = false, msg = ''
+
+      // Loop account object and validate fields
+      for (let field of Object.keys(state.currentAccount)) {
+        switch (field) {
+          case 'name':
+            isValid = !validator.isEmpty(validator.trim(name))
+            msg = 'Account name is required'
+            break
+          case 'currency':
+            isValid = !validator.isEmpty(validator.trim(currency))
+            msg = 'Account currency is required'
+            break
+          default:
+            break
+        }
+
+        // Throw error
+        if (!isValid) {
+          commit('SET_NOTIFICATION', { msg, type: 'error'})
+          return isValid
+        }
+      }
+
+      // Call API to add/update
+      console.log('Account:', state.currentAccount)
+          debugger
+      commit('SET_NOTIFICATION', {})
+      axios.post(ACCOUNTS_URL, state.currentAccount)
+        .then(response => {
+          commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
+          // Reset form
+          commit('SET_DATA', { name: 'currentAccount', data: {} })
+          dispatch('fetchAccounts')
+        })
+        .catch(err => {
+          console.error(err)
+          commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
+        })
+    },
+    deleteAccount({ commit, dispatch }, id) {
+      if (id && window.confirm("This will be permanently deleted")) {
+        axios.delete(ACCOUNTS_URL, { params: { _id: id }})
+          .then((response) => {
+            dispatch('fetchAccounts')
+            commit('SET_DATA', { name: 'notification', data: { msg: "Successfully deleted.", type: "success" }})
+          })
+          .catch((error) => console.log(error))
       }
     }
   }
