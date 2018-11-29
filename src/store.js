@@ -186,10 +186,11 @@ const store = new Vuex.Store({
         }
       }
     },
-    addAccount ({ state, commit, dispatch }) {
+    submitAccountForm ({ state, commit, dispatch }) {
+      console.log('Submitting account form')
       // reset notification
       commit('SET_NOTIFICATION', {})
-      let { name, currency } = state.currentAccount
+      let { name, currency, _id } = state.currentAccount
       let isValid = false, msg = ''
 
       // Loop account object and validate fields
@@ -203,7 +204,8 @@ const store = new Vuex.Store({
             isValid = !validator.isEmpty(validator.trim(currency))
             msg = 'Account currency is required'
             break
-          default:
+          case '_id':
+            isValid = true
             break
         }
 
@@ -216,19 +218,32 @@ const store = new Vuex.Store({
 
       // Call API to add/update
       console.log('Account:', state.currentAccount)
-          debugger
       commit('SET_NOTIFICATION', {})
-      axios.post(ACCOUNTS_URL, state.currentAccount)
-        .then(response => {
-          commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
-          // Reset form
-          commit('SET_DATA', { name: 'currentAccount', data: {} })
-          dispatch('fetchAccounts')
-        })
-        .catch(err => {
-          console.error(err)
-          commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
-        })
+      if (state.currentAccount._id) {
+        axios.put(`${ACCOUNTS_URL}/${state.currentAccount._id}`, state.currentAccount)
+          .then(response => {
+            commit('SET_NOTIFICATION', { msg: "Successfully updated.", type: "success" })
+            // Reset form
+            commit('SET_DATA', { name: 'currentAccount', data: {} })
+            dispatch('fetchAccounts')
+          })
+          .catch(err => {
+            console.error(err)
+            commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
+          })
+      } else {
+        axios.post(ACCOUNTS_URL, state.currentAccount)
+          .then(response => {
+            commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
+            // Reset form
+            commit('SET_DATA', { name: 'currentAccount', data: {} })
+            dispatch('fetchAccounts')
+          })
+          .catch(err => {
+            console.error(err)
+            commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
+          })
+      }
     },
     deleteAccount({ commit, dispatch }, id) {
       if (id && window.confirm("This will be permanently deleted")) {
@@ -239,6 +254,10 @@ const store = new Vuex.Store({
           })
           .catch((error) => console.log(error))
       }
+    },
+    selectAccount({ state, commit }, id) {
+      let account = state.accounts.filter((item) => item._id === id)[0]
+      commit('SET_DATA', { name: 'currentAccount', data: Object.assign({}, account) })
     }
   }
 })

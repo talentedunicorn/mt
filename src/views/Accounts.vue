@@ -4,7 +4,7 @@
       <h1>Accounts</h1>
     </header>
 
-    <form class="form" @submit="addAccount">
+    <form class="form" @submit.stop.prevent="submitAccountForm">
       <label>
         <span>Name</span>
         <input type="text" v-model="currentAccount.name"/>
@@ -18,15 +18,16 @@
         </select>
       </label>
 
-      <button class="button">Create</button>
+      <button class="button">{{ updating ? 'Update': 'Create' }}</button>
+      <button class="button" @click="resetForm">Cancel</button>
     </form>
 
     <section class="accounts">
       <ul>
         <li v-for="(account, k) in accounts" :key="k">
           <Account :name="account.name" :amount="account.amount" :currency="account.currency"/>
-          <button>Edit</button>
-          <button @click="deleteAccount(account._id)">Delete</button>
+          <button class="button" @click="selectAccount(account._id)">Edit</button>
+          <button class="button" @click="deleteAccount(account._id)">Delete</button>
         </li>
       </ul>
     </section>
@@ -46,13 +47,21 @@
         accounts: state => state.accounts,
         currentAccount: state => state.currentAccount,
         currencies: state => state.currencies
-      })
+      }),
+      updating() {
+        return this.currentAccount.hasOwnProperty('_id')
+      }
     },
     methods: {
       ...mapActions([
-        'addAccount',
-        'deleteAccount'
-        ])
+        'submitAccountForm',
+        'deleteAccount',
+        'selectAccount'
+        ]),
+      resetForm(e) {
+        e.preventDefault()
+        return this.$store.commit('SET_DATA', { name: 'currentAccount', data: {}})
+      }
     },
     mounted () {
       this.$store.dispatch('fetchData')
