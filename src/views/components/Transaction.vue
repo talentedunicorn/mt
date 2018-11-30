@@ -1,5 +1,5 @@
 <template>
-  <article class="transaction" :data-account="data.account">
+  <article class="transaction" :data-account="getAccountById(data.account).name">
     <h3 class="transaction-amount">{{ currency }} <span>{{ data.amount | money }}</span></h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
@@ -12,6 +12,7 @@
 
 <script>
   import moment from 'moment'
+  import { mapGetters } from 'vuex'
 
   export default({
     name: 'Transaction',
@@ -25,6 +26,11 @@
         let formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 })
         return formatter.format(parseFloat(value))
       }
+    },
+    computed: {
+      ...mapGetters([
+        'getAccountById'
+        ])
     }
   })
 </script>

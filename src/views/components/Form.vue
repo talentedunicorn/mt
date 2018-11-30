@@ -4,7 +4,7 @@
       <span>Account</span>
       <select name="account" v-model="form.account">
         <option disabled :value="undefined">Select account</option>
-        <option v-for="(account, k) in accounts" :key="k" :value="account.name">{{ account.name }}</option>
+        <option v-for="(account, k) in accounts" :key="k" :value="account._id">{{ account.name }}</option>
       </select>
     </label>
 

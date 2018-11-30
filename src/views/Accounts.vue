@@ -18,8 +18,10 @@
         </select>
       </label>
 
-      <button class="button">{{ updating ? 'Update': 'Create' }}</button>
-      <button class="button" @click="resetForm">Cancel</button>
+      <div class="form-controls">
+        <button class="button">{{ updating ? 'Update': 'Create' }}</button>
+        <button class="button" @click="resetForm">Cancel</button>
+      </div>
     </form>
 
     <section class="accounts">
@@ -60,17 +62,21 @@
         ]),
       resetForm(e) {
         e.preventDefault()
-        return this.$store.commit('SET_DATA', { name: 'currentAccount', data: {}})
+        return this.$store.commit('SET_DATA', { name: 'currentAccount', data: { name: "", currency: "" }})
       }
     },
     mounted () {
       this.$store.dispatch('fetchData')
+      this.$store.commit('SET_DATA', { name: 'notification', data: {}})
     }
   }
   </script>
 
 <style lang="scss">
   .form {
+    --form-width: 40rem;
+    max-width: var(--form-width);
+    margin-left: auto;
     display: flex;
     flex-flow: column;
 
@@ -80,6 +86,22 @@
       span {
         display: block;
       }
+    }
+    &-controls {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        margin-left: var(--space);
+      }
+    }
+  }
+
+  .accounts {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: var(--space);
     }
   }
 </style>

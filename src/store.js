@@ -36,6 +36,9 @@ const store = new Vuex.Store({
     ],
     accounts: []
   },
+  getters: {
+    getAccountById: (state) => (id) => state.accounts.find(account => account._id === id)
+  },
   mutations: {
     ['SET_DATA'] (state, { name, data }) {
       state[name] = data
@@ -190,7 +193,7 @@ const store = new Vuex.Store({
       console.log('Submitting account form')
       // reset notification
       commit('SET_NOTIFICATION', {})
-      let { name, currency, _id } = state.currentAccount
+      let { name, currency } = state.currentAccount
       let isValid = false, msg = ''
 
       // Loop account object and validate fields
