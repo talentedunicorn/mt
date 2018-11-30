@@ -1,6 +1,6 @@
 <template>
   <article class="transaction" :data-account="data.account">
-    <h3 class="transaction-amount">{{ currency }} <span v-text="data.amount"/></h3>
+    <h3 class="transaction-amount">{{ currency }} <span>{{ data.amount | money }}</span></h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
       <span>{{ data.date | shortDate }}</span>
@@ -20,6 +20,10 @@
       shortDate(value) {
         if (!value) return ''
         return moment(value).format('MMM, YYYY - DD')
+      },
+      money(value) {
+        let formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 })
+        return formatter.format(parseFloat(value))
       }
     }
   })
