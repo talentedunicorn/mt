@@ -18,6 +18,11 @@
         </select>
       </label>
 
+      <label>
+        <span>Amount</span>
+        <input type="number" step="0.01" v-model="currentAccount.amount" />
+      </label>
+
       <div class="form-controls">
         <button class="button">{{ updating ? 'Update': 'Create' }}</button>
         <button class="button" @click="resetForm">Cancel</button>
@@ -62,7 +67,7 @@
         ]),
       resetForm(e) {
         e.preventDefault()
-        return this.$store.commit('SET_DATA', { name: 'currentAccount', data: { name: "", currency: "" }})
+        return this.$store.commit('RESET_CURRENT_ACCOUNT')
       }
     },
     mounted () {
@@ -102,6 +107,10 @@
       list-style: none;
       margin: 0;
       padding: var(--space);
+    }
+
+    .button {
+      margin-left: var(--space);
     }
   }
 </style>

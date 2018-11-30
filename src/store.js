@@ -17,7 +17,8 @@ const store = new Vuex.Store({
     ],
     currentAccount: {
       name: "",
-      currency: ""
+      currency: "",
+      amount: 0
     },
     selectedCategories: [],
     allCategories: [
@@ -50,6 +51,9 @@ const store = new Vuex.Store({
     ['SET_NOTIFICATION'] (state, data) {
       state.notification = data
     },
+    ['RESET_CURRENT_ACCOUNT'] (state) {
+      state.currentAccount = { name: "", currency: "", amount: 0 } 
+    }
   },
   actions: {
     submitForm ({ state, commit, dispatch }) {
@@ -193,7 +197,7 @@ const store = new Vuex.Store({
       console.log('Submitting account form')
       // reset notification
       commit('SET_NOTIFICATION', {})
-      let { name, currency } = state.currentAccount
+      let { name, currency, amount } = state.currentAccount
       let isValid = false, msg = ''
 
       // Loop account object and validate fields
@@ -207,13 +211,17 @@ const store = new Vuex.Store({
             isValid = !validator.isEmpty(validator.trim(currency))
             msg = 'Account currency is required'
             break
+          case 'amount':
+            isValid = parseInt(amount) > 0
+            msg = 'Enter a valid amount'
+            break
           case '_id':
             isValid = true
             break
         }
 
         // Throw error
-        if (!isValid) {
+        if (isValid === false) {
           commit('SET_NOTIFICATION', { msg, type: 'error'})
           return isValid
         }
@@ -260,7 +268,8 @@ const store = new Vuex.Store({
     },
     selectAccount({ state, commit }, id) {
       let account = state.accounts.filter((item) => item._id === id)[0]
-      commit('SET_DATA', { name: 'currentAccount', data: Object.assign({}, account) })
+      commit('RESET_CURRENT_ACCOUNT')
+      commit('SET_DATA', { name: 'currentAccount', data: Object.assign(state.currentAccount, account) })
     }
   }
 })
