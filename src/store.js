@@ -17,8 +17,7 @@ const store = new Vuex.Store({
     ],
     currentAccount: {
       name: "",
-      currency: "",
-      amount: 0
+      currency: ""
     },
     selectedCategories: [],
     allCategories: [
@@ -38,7 +37,8 @@ const store = new Vuex.Store({
     accounts: []
   },
   getters: {
-    getAccountById: (state) => (id) => state.accounts.find(account => account._id === id)
+    getAccountById: (state) => (id) => state.accounts.find(account => account._id === id),
+    getAccountBalance: (state) => (id) => 30,
   },
   mutations: {
     ['SET_DATA'] (state, { name, data }) {
@@ -211,10 +211,10 @@ const store = new Vuex.Store({
             isValid = !validator.isEmpty(validator.trim(currency))
             msg = 'Account currency is required'
             break
-          case 'amount':
-            isValid = parseInt(amount) > 0
-            msg = 'Enter a valid amount'
-            break
+          // case 'amount':
+          //   isValid = parseInt(amount) > 0
+          //   msg = 'Enter a valid amount'
+          //   break
           case '_id':
             isValid = true
             break

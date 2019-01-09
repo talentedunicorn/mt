@@ -1,6 +1,6 @@
 <template>
-  <article class="transaction" :data-account="getAccountById(data.account).name">
-    <h3 class="transaction-amount">{{ currency }} <span>{{ data.amount | money }}</span></h3>
+  <article class="transaction" :data-account="account.name">
+    <h3 class="transaction-amount">{{ account.currency }} <span>{{ data.amount | money }}</span></h3>
     <p class="transaction-comment">{{ data.comment }}</p>
     <time :datetime="data.date + ':' + data.time">
       <span>{{ data.date | shortDate }}</span>
@@ -12,11 +12,10 @@
 
 <script>
   import moment from 'moment'
-  import { mapGetters } from 'vuex'
 
   export default({
     name: 'Transaction',
-    props: ['data', 'currency'],
+    props: ['data'],
     filters: {
       shortDate(value) {
         if (!value) return ''
@@ -28,9 +27,10 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'getAccountById'
-        ])
+      account () {
+        let account = this.$store.getters.getAccountById(this.data.account)
+        return account ? account : { name: "Invalid account", currency: "" }
+      }
     }
   })
 </script>

@@ -7,16 +7,16 @@
     <Form class="form" />
 
     <section class="accounts">
-      <Account v-for="(account, k) in accounts" :key="k" :name="account.name" :amount="account.amount" :currency="currency"/>
+      <Account v-for="account in accounts" :key="account._id" :name="account.name" :id="account._id" :currency="account.currency"/>
     </section>
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
       <ol>
         <li v-for="(transaction, index) in transactions">
-          <Transaction :currency="currency" @click="updateItem(transaction._id)" :data="transaction">
+          <Transaction @click="updateTransaction(transaction._id)" :data="transaction">
             <div class="controls">
-              <a href="#" class="button" @click="updateItem(transaction._id, $event)">Change</a>
-              <a href="#" class="button" @click="deleteItem(transaction._id, $event)">Delete</a>
+              <a href="#" class="button" @click="updateTransaction(transaction._id, $event)">Change</a>
+              <a href="#" class="button" @click="deleteTransaction(transaction._id, $event)">Delete</a>
             </div>
           </Transaction>
         </li>
@@ -38,20 +38,21 @@
       Transaction,
       Account
     },
-    computed: mapState({
-      currency: state => state.currency,
-      transactions: state => state.transactions,
-      accounts: state => state.accounts
-    }),
+    computed: {
+      ...mapState({
+        transactions: state => state.transactions,
+        accounts: state => state.accounts
+      })
+    },
     mounted() {
       this.$store.dispatch('fetchData')
     },
     methods: {
-      deleteItem(id, event) {
+      deleteTransaction(id, event) {
         event.preventDefault()
         this.$store.dispatch('deleteTransaction', id)
       },
-      updateItem(id, event) {
+      updateTransaction(id, event) {
         event.preventDefault()
         this.$store.dispatch('selectTransaction', id)
       }

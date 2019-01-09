@@ -1,11 +1,12 @@
 <template>
   <div>
     <h1>All transactions</h1>
-    <Transaction v-for="(item, i) in transactions" :key="i" :currency="currency" :data="item"/>
+    <Transaction v-for="(item, i) in transactions" :key="i" :data="item"/>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import Transaction from '../components/Transaction'
   export default ({
     name: "TransactionList",
@@ -13,12 +14,9 @@
       Transaction
     },
     computed: {
-      transactions () {
-        return this.$store.state.transactions
-      },
-      currency () {
-        return this.$store.state.currency
-      }
+      ...mapState([
+        'transactions'
+      ])
     },
     mounted() {
       this.$store.dispatch('fetchData')
