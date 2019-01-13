@@ -1,19 +1,19 @@
 <template>
   <article>
-    <h2>{{ name }}</h2>
-    <p>{{ currency }} <span>{{ amount | money }}</span></p>
+    <h2>{{ account.name }}</h2>
+    <p>{{ account.currency }} <span>{{ account.amount | money }}</span></p>
   </article>
 </template>
 
 <script>
   export default ({
     name: "Account",
-    data() {
-      return {
-        amount: 0
+    computed: {
+      account() {
+        return this.$store.getters.getAccountById(this.id)
       }
     },
-    props: [ "id", "name", "currency" ],
+    props: [ "id" ],
     filters: {
       money(value) {
         let formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 })
@@ -39,7 +39,7 @@
       }
     },
     mounted() {
-      this.getAccountBalance(this.id)
+      this.$store.dispatch('getAccountBalance', this.id)
     }
   })
 </script>

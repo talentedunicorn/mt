@@ -37,8 +37,7 @@ const store = new Vuex.Store({
     accounts: []
   },
   getters: {
-    getAccountById: (state) => (id) => state.accounts.find(account => account._id === id),
-    getAccountBalance: (state) => (id) => 30,
+    getAccountById: (state) => (id) => state.accounts.find(account => account._id === id)
   },
   mutations: {
     ['SET_DATA'] (state, { name, data }) {
@@ -53,6 +52,12 @@ const store = new Vuex.Store({
     },
     ['RESET_CURRENT_ACCOUNT'] (state) {
       state.currentAccount = { name: "", currency: "", amount: 0 } 
+    },
+    ['SET_ACCOUNT_BALANCE'] (state, data) {
+      let index = state.accounts.findIndex((account) => account._id === data.id) 
+      let account = state.accounts[index]
+      account.amount = data.amount
+      Vue.set(state.accounts, index, account)
     }
   },
   actions: {
@@ -70,20 +75,22 @@ const store = new Vuex.Store({
               .then(function (response) {
                 commit('SET_NOTIFICATION', { msg: "Successfully updated.", type: "success" })
                 commit('RESET_FORM')
-                dispatch('fetchData')
+                dispatch('fetchTransactions')
               })
           } else {
             axios.post(TRANSACTIONS_URL, currentTransaction)
               .then(function (response) {
                 commit('SET_NOTIFICATION', { msg: "Successfully added.", type: "success" })
                 commit('RESET_FORM')
-                dispatch('fetchData')
+                dispatch('fetchTransactions')
               })
               .catch((error) => { 
                 console.error(error)
                 commit('SET_NOTIFICATION', { msg: "Failed to save, please retry", type: "error" })
               })
           }
+
+          dispatch('getAccountBalance', currentTransaction.account)
         }
       })
     },
@@ -272,6 +279,20 @@ const store = new Vuex.Store({
       let account = state.accounts.filter((item) => item._id === id)[0]
       commit('RESET_CURRENT_ACCOUNT')
       commit('SET_DATA', { name: 'currentAccount', data: Object.assign(state.currentAccount, account) })
+    },
+    getAccountBalance({ state, commit }, id) {
+      axios.get(`${window.location.origin}/transactions?account=${id}&$select[]=amount&$select[]=type`)
+        .then((response) => {
+          let amount = response.data.data.map(item => {
+            if (item.type === "Debit") {
+              return parseFloat(item.amount)
+            } else {
+              return parseFloat(item.amount) * -1
+            }
+          }).reduce((acc, cur) => cur + acc)
+          commit('SET_ACCOUNT_BALANCE', { id, amount })
+        })
+        .catch(err => console.error(err))
     }
   }
 })

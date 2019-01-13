@@ -7,7 +7,7 @@
     <Form class="form" />
 
     <section class="accounts">
-      <Account v-for="account in accounts" :key="account._id" :name="account.name" :id="account._id" :currency="account.currency"/>
+      <Account v-for="account in accounts" :key="account._id" :id="account._id"/>
     </section>
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
