@@ -45,8 +45,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/helpers';
-
   article {
     display: grid;
     padding: var(--space);

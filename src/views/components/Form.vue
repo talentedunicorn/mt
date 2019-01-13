@@ -101,8 +101,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/helpers';
-
   form {
     display: grid;
     grid-gap: var(--space) var(--half-space);

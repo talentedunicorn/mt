@@ -110,6 +110,8 @@ const store = new Vuex.Store({
           })
           .catch((error) => console.log(error))
       }
+
+      commit('RESET_FORM')
     },
     selectTransaction({ state, commit }, id) {
       let transaction = state.transactions.filter((item) => item._id === id)[0]

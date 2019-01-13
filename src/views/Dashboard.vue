@@ -11,16 +11,10 @@
     </section>
     <section v-if="transactions.length > 0">
       <h2>Latest transactions</h2>
-      <ol>
-        <li v-for="(transaction, index) in transactions">
-          <Transaction @click="updateTransaction(transaction._id)" :data="transaction">
-            <div class="controls">
-              <a href="#" class="button" @click="updateTransaction(transaction._id, $event)">Change</a>
-              <a href="#" class="button" @click="deleteTransaction(transaction._id, $event)">Delete</a>
-            </div>
-          </Transaction>
-        </li>
-      </ol>
+      <Transaction
+        v-for="transaction in transactions"
+        :key="transaction._id"
+        :data="transaction"/>
     </section>
   </div>
 </template>
@@ -46,23 +40,11 @@
     },
     mounted() {
       this.$store.dispatch('fetchData')
-    },
-    methods: {
-      deleteTransaction(id, event) {
-        event.preventDefault()
-        this.$store.dispatch('deleteTransaction', id)
-      },
-      updateTransaction(id, event) {
-        event.preventDefault()
-        this.$store.dispatch('selectTransaction', id)
-      }
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import '../style/helpers';
-
   .wrapper {
     display: grid;
     min-height: 100vh;

@@ -25,8 +25,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/helpers';
-
   h1 {
     @extend %heading;
     padding: var(--space);

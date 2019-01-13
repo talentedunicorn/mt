@@ -6,7 +6,10 @@
       <span>{{ data.date | shortDate }}</span>
       <span>{{ data.time }}</span>
     </time>
-    <slot></slot>
+    <div>
+      <button class="button" @click="updateTransaction(data._id)">Update</button>
+      <button class="button" @click="deleteTransaction(data._id)">Delete</button>
+    </div>
   </article>
 </template>
 
@@ -31,13 +34,19 @@
         let account = this.$store.getters.getAccountById(this.data.account)
         return account ? account : { name: "Invalid account", currency: "" }
       }
+    },
+    methods: {
+      deleteTransaction(id) {
+        this.$store.dispatch('deleteTransaction', id)
+      },
+      updateTransaction(id) {
+        this.$store.dispatch('selectTransaction', id)
+      }
     }
   })
 </script>
 
-<style lang="scss">
-  @import '../../style/_helpers.scss';
-
+<style lang="scss" scoped>
 	.transaction {
 		padding: var(--space);
 		margin: 0;
@@ -55,7 +64,7 @@
       font-size: var(--font-small);
     }
 
-		&:last-child {
+		&:last-of-type {
 			border: none;
 		}
 
@@ -89,4 +98,12 @@
 			align-self: end;
 		}
 	}
+
+  .button {
+    margin-right: var(--space);
+
+    &:last-of-type {
+      margin-right: unset;
+    }
+  }
 </style>

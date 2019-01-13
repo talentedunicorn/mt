@@ -1,8 +1,6 @@
 <template>
   <div class="wrapper">
-    <header>
-      <h1>Accounts</h1>
-    </header>
+    <Heading title="Accounts" backLink="/"/>
 
     <form class="form" @submit.stop.prevent="submitAccountForm">
       <label>
@@ -39,10 +37,12 @@
 <script>
   import { mapState, mapActions, mapGetters } from 'vuex'
   import Account from './components/Account'
+  import Heading from './components/Heading'
   export default {
     name: 'AccountsPage',
     components: {
-      Account
+      Account,
+      Heading
     },
     computed: {
       ...mapState({

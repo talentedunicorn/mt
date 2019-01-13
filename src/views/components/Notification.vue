@@ -1,7 +1,6 @@
 <template>
   <article :class="type">
     <p>{{ msg }}</p>
-
     <button @click="clear">Clear</button>
   </article>
 </template>
@@ -19,8 +18,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/helpers';
-
   article {
     position: sticky;
     z-index: var(--z-max);
